@@ -1,0 +1,16 @@
+[wokwi]
+version = 1
+elf = ".pio/build/esp32-c3-devkitm-1/firmware.elf"
+firmware = ".pio/build/esp32-c3-devkitm-1/firmware.bin"
+
+[[chip]]
+name = 'pcf8575'
+binary = 'chips/pcf8575.chip.wasm'
+
+[[chip]]
+name = 'si5351'
+binary = 'chips/si5351.chip.wasm'
+
+[[chip]]
+name = '24lc256'
+binary = 'chips/24lc256.chip.wasm'
