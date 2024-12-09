@@ -33,8 +33,6 @@ void TrailRadio::memPresets() {
       case 10: freq = 144489000; break; // WSPR frequency.
     }
 
-    freqAdjustStep = 2;
-    setstep(false);
   }
 }
 

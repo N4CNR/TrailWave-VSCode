@@ -115,7 +115,6 @@ void TrailRadio::setstep(bool down) {
       case 5: step = 10000; break;
       case 6: step = 100000; break;
     }
-
     displayUpdate();
   }
 }

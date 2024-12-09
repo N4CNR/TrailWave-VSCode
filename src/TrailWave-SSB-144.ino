@@ -1,5 +1,6 @@
-#include <Wire.h>
+//#include <Wire.h>
 #include "TrailWave.h"
+#include <PCF8575Debounce.h>
 
 TrailRadio trailRadio;
 
@@ -79,25 +80,41 @@ void getInput() {
   }
 }
 
+/*
+void configSI5351() {
+  si5351.init(SI5351_CRYSTAL_LOAD_8PF,  0, 0);  // Initialize the SI5351 (commented out).
+  si5351.set_correction(cal, SI5351_PLL_INPUT_XO);  // Set frequency correction for SI5351 (commented out).
+  si5351.drive_strength(SI5351_CLK0,  SI5351_DRIVE_8MA);  // Set drive strength for SI5351 clock 0 (commented out).
+  si5351.output_enable(SI5351_CLK0, 1);  // Enable SI5351 clock 0 (commented out).
+  si5351.output_enable(SI5351_CLK1, 0);  // Disable SI5351 clock 1 (commented out).
+  si5351.output_enable(SI5351_CLK2,  0);  // Disable SI5351 clock 2 (commented out).
+}
+*/
+
 void setup() {
   Serial.begin(115200);
   analogReadResolution(12);
 
+  // Test I2C initialization
+  //Serial.println("I2C initialized with custom SDA and SCL pins.");
+  
+  pinMode(FACTORY_RESET_PIN, INPUT_PULLUP);
+  pinMode(POWER_DETECTION_PIN, INPUT_PULLUP);
   pinMode(RX_TX_LED_PIN, OUTPUT);
   pinMode(RX_TX_PIN, INPUT_PULLUP);
+  pinMode(SAVE_SETTINGS_PIN, INPUT_PULLUP);
   pinMode(TXRX_RELAY_PIN, OUTPUT);
   pinMode(TXRX_FILTER_RELAY_PIN, OUTPUT);
 
+  pcf.begin(0x20, 7);
   u8g2.begin();
   u8g2.clear();
   u8g2.clearBuffer();
-
-  pcf.begin(0x20, 7);  
   trailRadio.init(&u8g2);
 }
 
 void loop() {
   delay(10);
   getInput();
-  trailRadio.update(pcf);
+  trailRadio.update();
 }

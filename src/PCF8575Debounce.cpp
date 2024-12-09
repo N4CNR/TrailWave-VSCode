@@ -14,6 +14,7 @@ void PCF8575Debounce::begin(uint8_t address, uint8_t intPin) {
   for (int i = 0; i < 16; ++i) {
     buttonStates[i] = 1;
   }
+  pinMode(intPin, INPUT_PULLUP); // Added this...
   attachInterrupt(digitalPinToInterrupt(intPin), pcfISR, CHANGE);
 }
 

@@ -12,32 +12,34 @@ void TrailRadio::displaySplashScreen() {
 }
 
 void TrailRadio::displayUpdate() {
-  unsigned int m = freq / 1000000;
-  unsigned int k = (freq % 1000000) / 1000;
-  unsigned int h = (freq % 1000) / 1;
-  char buffer[15] = "";
-  u8g2->firstPage();
-  do {
-    u8g2->setFont(u8g2_font_10x20_tf);
-    unsigned int h = (freq % 1000) / 10;
-    sprintf(buffer, "%03u.%03u.%02u", m, k, h);
-    u8g2->drawStr(15, 15, buffer);
+  if (initialized) {
+    unsigned int m = freq / 1000000;
+    unsigned int k = (freq % 1000000) / 1000;
+    unsigned int h = (freq % 1000) / 1;
+    char buffer[15] = "";
+    u8g2->firstPage();
+    do {
+      u8g2->setFont(u8g2_font_10x20_tf);
+      unsigned int h = (freq % 1000) / 10;
+      sprintf(buffer, "%03u.%03u.%02u", m, k, h);
+      u8g2->drawStr(15, 15, buffer);
 
-    if (rit_enabled && !split_mode) {
-      u8g2->setFont(u8g2_font_7x14_tf);
-      u8g2->setCursor(1, 37);
-      u8g2->print("RIT:");
-      u8g2->print(rit_offset / 1000.0);
-    }
+      if (rit_enabled && !split_mode) {
+        u8g2->setFont(u8g2_font_7x14_tf);
+        u8g2->setCursor(1, 37);
+        u8g2->print("RIT:");
+        u8g2->print(rit_offset / 1000.0);
+      }
 
-    if (split_mode) {
-      u8g2->setFont(u8g2_font_7x14_tf);
-      u8g2->setCursor(5, 37);
-      u8g2->print("Split");
-    }
+      if (split_mode) {
+        u8g2->setFont(u8g2_font_7x14_tf);
+        u8g2->setCursor(5, 37);
+        u8g2->print("Split");
+      }
 
-    layout();
-  } while (u8g2->nextPage());
+      layout();
+    } while (u8g2->nextPage());
+  }
 }
 
 void TrailRadio::layout() {
@@ -62,8 +64,7 @@ void TrailRadio::layout() {
       case 0: u8g2->print("USB"); break;
       case 1: u8g2->print("LSB"); break;
       case 2: u8g2->print("CW"); break;
-      case 3: u8g2->print("FSK"); break;
-      case 4: u8g2->print("FSK"); break;
+      case 3: u8g2->print("DIG"); break;
     }
   }
 

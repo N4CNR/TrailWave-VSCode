@@ -1,9 +1,9 @@
 #include "TrailWave.h"
 
 void TrailRadio::init(U8G2_OLED* display) {
+  u8g2 = display;
   mode = 0;
   period = 100;
-  u8g2 = display;
   locked = false;
   interfreq = IF;
   cal = XT_CAL_F;
@@ -13,17 +13,18 @@ void TrailRadio::init(U8G2_OLED* display) {
   freqA = FREQ_MIN;
   freqB = FREQ_MIN;
   freqAdjustStep = 2;
-  freqAdjustStep = 2;
+  step = 2;
   rit_enabled = false;
   pttButtonState = false;
-  memSelection = MEM_INIT;
-  memPresets();
   setstep(false);
+  initPrefs();
+  memPresets();
   displaySplashScreen();
   delay(2000);
+  initialized = true;
 }
 
-void TrailRadio::update(PCF8575Debounce& pcf) {
+void TrailRadio::update() {
   if (freqold != freq || rit_enabled) {
     tunegen();
     freqold = freq;
@@ -46,6 +47,19 @@ void TrailRadio::update(PCF8575Debounce& pcf) {
     rit_changed = false;
   }
 
+// Check if the SAVE_SETTINGS_PIN is LOW or POWER_DETECTION_PIN is LOW
+if (digitalRead(SAVE_SETTINGS_PIN) == LOW || digitalRead(POWER_DETECTION_PIN) == LOW) {
+    prefsSave();
+    Serial.println("Save button pressed.");
+}
+
+// Check if the SAVE_SETTINGS_PIN is LOW or POWER_DETECTION_PIN is LOW
+if (digitalRead(FACTORY_RESET_PIN) == LOW) {
+    prefsWipe();
+    Serial.println("Factory Wipe button pressed.");
+}
+
+  //prefsSave();
   handlePTT();
   sgnalread();
 }

@@ -2,17 +2,20 @@
 #define TRAIL_WAVE
 
 #include <U8g2lib.h>
-#include "PCF8575Debounce.h"
+#include <Preferences.h>
 
 #define IF 455
-#define MEM_INIT 2
+//#define MEM_INIT 2
 #define XT_CAL_F 33000
 #define S_GAIN 303
 
 // Define GPIO and ADC pins
 #define ADC_PIN 1                 // ESP32-C3 pin for ADC input, typically connected to the RF signal for strength measurement.
-#define RX_TX_PIN 5               // ESP32-C3 pin for controlling TX/RX toggle.(PTT)
+#define POWER_DETECTION_PIN 5     // ESP32-C3 pin for Detecing power off and saving current settings.
+#define FACTORY_RESET_PIN 6       // ESP32-C3 pin for Force Rest of Defaults.
+#define RX_TX_PIN 4               // ESP32-C3 pin for controlling TX/RX toggle.(PTT)
 #define RX_TX_LED_PIN 0           // ESP32-C3 pin for controlling TX/RX Led Relay toggle.(PTT)
+#define SAVE_SETTINGS_PIN 10      // ESP32-C# pin for Saving Current Settings.
 #define TXRX_FILTER_RELAY_PIN 3   // ESP#@-C3 pin for controlling TX/RX filter relay (switches between transmit and receive).
 #define TXRX_RELAY_PIN 2          // ESP32-C# pin for controlling TX/RX relay (switches between transmit and receive).
 
@@ -22,8 +25,8 @@
 #define MEM_DOWN_PIN 3            // PCF8575 pin for decreasing band selection.
 #define MEM_UP_PIN 2              // PCF8575 pin for increasing band selection.
 #define MODE_PIN 13               // PCF8575 pin for Encoder button (menu/select).
-//#define ID_TIMER_PIN 0            // PCF8575 pin for Enable/Restart ID Timer.
-//#define ID_TIMER_RESET_PIN 1      // PCF8575 pin for Restart ID Timer.
+#define SAVE_PIN 0                // PCF8575 pin for prefs save.
+#define LOAD_PIN 1                // PCF8575 pin for prefs load.
 #define RIT_PIN 5                 // PCF8575 pin for Receiver Incremental Tuning (RIT) Encable/Disable pin (toggles RIT on/off). (RIT)
 #define RIT_DOWN_PIN 7            // PCF8575 pin for Receiver Incremental Tuning (RIT) down button pin.(RIT)
 #define RIT_UP_PIN 6              // PCF8575 pin for Receiver Incremental Tuning (RIT) up button pin.(RIT)
@@ -43,6 +46,7 @@ const unsigned long FREQ_MAX = 144650000;
 class TrailRadio {
   private:
     U8G2_OLED* u8g2;
+    Preferences prefs;
 
     unsigned int smval;
     unsigned int period;
@@ -51,9 +55,10 @@ class TrailRadio {
     int lastRITClk;
 
     bool locked;
-    bool vfo_is_A;
     bool vfoMode;
+    bool vfo_is_A;
     bool pushToTalk;
+    bool initialized;
     bool rit_changed;
     bool rit_enabled;
     bool pttButtonState;
@@ -90,20 +95,24 @@ class TrailRadio {
     bool memMode;
     bool split_mode;
 
-    void update(PCF8575Debounce& pcf);
+    void update();
     void swapVFOs();
     void toggleRit();
     void decPreset();
     void incPreset();
     void changeMode();
+    void prefsWipe();    
+    void prefsSave();
+    void prefsLoad();
+    void initPrefs();
     void enableMemMode();
     void disableMemMode();
     void copyVFOAtoVFOB();
     void setstep(bool dir);
     void toggleSplitMode();
     void adjustRIT(short dir);
-    void init(U8G2_OLED* display);
     void set_frequency(short dir);
+    void init(U8G2_OLED* display);
 };
 
 #endif
