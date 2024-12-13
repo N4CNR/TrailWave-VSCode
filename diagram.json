@@ -329,7 +329,6 @@
     [ "gnd3:GND", "sw1:1", "black", [ "v9.6", "h115.2" ] ],
     [ "chip1:GND", "gnd4:GND", "black", [ "h0" ] ],
     [ "vcc4:VCC", "chip1:VCC", "red", [ "v0", "h28.8", "v9.6" ] ],
-    [ "btn17:2.l", "btn1:1.l", "black", [ "h-9.6", "v48.4" ] ],
     [ "btn1:1.r", "btn2:1.l", "black", [ "v0" ] ],
     [ "btn2:1.r", "btn3:1.l", "black", [ "v0" ] ],
     [ "btn3:1.r", "btn4:1.l", "black", [ "v0" ] ],
@@ -432,7 +431,8 @@
     [ "btn20:1.r", "esp:RST", "violet", [ "v9.6", "h10.4" ] ],
     [ "gnd2:GND", "btn20:2.l", "black", [ "v0" ] ],
     [ "esp:9", "oled1:SCL", "gold", [ "h83.98" ] ],
-    [ "esp:8", "oled1:SDA", "blue", [ "h26.38", "v-9.6", "h67.2" ] ]
+    [ "esp:8", "oled1:SDA", "blue", [ "h26.38", "v-9.6", "h67.2" ] ],
+    [ "gnd8:GND", "btn18:2.r", "black", [ "v0", "h-9.6", "v-28.8" ] ]
   ],
   "dependencies": {}
 }
